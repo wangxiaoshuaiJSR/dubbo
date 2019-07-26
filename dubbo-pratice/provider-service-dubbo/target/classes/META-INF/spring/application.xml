@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd        http://dubbo.apache.org/schema/dubbo        http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+    <!--暴露的服务名称-->
+    <dubbo:application name="provider-service-dubbo"/>
+
+    <dubbo:registry id="rg1" address="zookeeper://192.168.5.130:2181"/>
+    <dubbo:registry id="rg2" address="zookeeper://192.168.5.137:2181"/>
+
+    <dubbo:protocol name="dubbo" port="20880"/>
+    <dubbo:protocol name="rest" port="8888" server="jetty"/>
+
+    <dubbo:protocol name="webservice" port="8080" server="jetty"/>
+
+    <dubbo:service interface="com.self.code.api.IRpcHelloService" ref="providerService" registry="rg1" protocol="rest"/>
+    <dubbo:service interface="com.self.code.api.IRpcSayService" ref="sayService"
+       protocol="webservice" registry="rg2"/>
+
+    <bean id="providerService" class="com.self.code.RpcHelloService"/>
+    <bean id="sayService" class="com.self.code.RpcSayService"/>
+
+</beans>
